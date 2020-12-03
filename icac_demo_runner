@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+killall python
+python ./scripts/icac_demo_runner.py $1 115200 $2 500000
+killall python
