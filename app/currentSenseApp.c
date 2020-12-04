@@ -2,13 +2,13 @@
 
 /************************************** Dependencies to be injected ************************************/
 #include "adapter_PAC1720/adapter_PAC1720.h"
-#include "lib/i2cmaster/i2cmaster.h"
-#include "lib/delay/user_delay.h"
+#include "src/i2cmaster/i2cmaster.h"
+#include "src/delay/user_delay.h"
 #include "lib/debug/debug.h"
 #include <stdio.h>
 #include <avr/io.h>
 
-#include "lib/measurement/sub_system.h"
+#include "src/measurement/sub_system.h"
 
 void powerMeasurement();
 void new_powerMeasurement(uint8_t *state_of_the_main_MCU);

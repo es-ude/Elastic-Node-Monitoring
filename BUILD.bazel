@@ -1,13 +1,40 @@
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 cc_library(
-    name = "Library",
-    srcs = glob(["src/**/*.c", "src/**/*.h"]),
-    copts = cpu_frequency_flag(),
-    visibility = ["//visibility:public"],
-    deps = [
-        "//Energy:HdrOnlyLib"
-    ]
+	name = "DelayLib",
+	srcs = ["src/delay/user_delay.c"],
+	hdrs = ["src/delay/user_delay.h"],
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag(),
+)
+
+cc_library(
+	name = "I2cLib",
+	srcs = glob(["src/i2cmaster/*.c"]),
+	hdrs = glob(["src/i2cmaster/*.h"]),
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag()
+)
+
+cc_library(
+	name = "PAC1720DriverLib",
+	srcs = ["src/PAC1720_driver/PAC1720_driver.c"],
+	hdrs = glob(["src/PAC1720_driver/*.h"]),
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag(),
+	deps = [],
+)
+
+cc_library(
+     name = "SubSystem",
+     srcs = glob(["src/measurement/*.c"]),
+     hdrs = glob(["src/measurement/*.h"]),
+     visibility = ["//visibility:public"],
+     copts = cpu_frequency_flag(),
+     deps = [
+     "I2cLib",
+     "@ElasticNodeMiddleware//:DebugLufaLib",
+     ]
 )
 
 py_library(

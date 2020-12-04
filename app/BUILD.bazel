@@ -8,11 +8,11 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "AdapterLib",
-        "//lib:I2cLib",
-        "//lib:PAC1720DriverLib",
-        "//lib:DelayLib",
+        "//:I2cLib",
+        "//:PAC1720DriverLib",
+        "//:DelayLib",
         "@ElasticNodeMiddleware//:DebugLufaLib",
-        "//lib:SubSystem"
+        "//:SubSystem"
     ],
 )
 
@@ -22,7 +22,7 @@ cc_library(
     hdrs = ["adapter_PAC1720/adapter_PAC1720.h"],
     copts = cpu_frequency_flag(),
     deps = [
-        "//lib:PAC1720DriverLib",
+        "//:PAC1720DriverLib",
     ],
 	visibility = [
 		"//test:__pkg__",
@@ -37,7 +37,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-#        "//lib:DelayLib",
-#        "//lib:SubSystem"
+#        "//:DelayLib",
+#        "//:SubSystem"
     ]
 )

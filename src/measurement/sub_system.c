@@ -1,7 +1,7 @@
 #include "sub_system.h"
 #include <inttypes.h>
 #include <stdint.h>
-#include "lib/i2cmaster/i2cmaster.h"
+#include "src/i2cmaster/i2cmaster.h"
 #include "lib/debug/debug.h"
 
 

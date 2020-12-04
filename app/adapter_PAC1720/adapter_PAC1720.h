@@ -16,7 +16,7 @@ extern "C"
 
 
 /* Header includes */
-#include "lib/PAC1720_driver/PAC1720_driver.h"
+#include "src/PAC1720_driver/PAC1720_driver.h"
 
 /** default values for the configuration settings **/
 #define DEFAULT_VSRC_SAMPLE_TIME VSRC_SAMPLE_TIME_20ms
