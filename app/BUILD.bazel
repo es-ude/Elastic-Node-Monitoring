@@ -1,0 +1,43 @@
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binary", "default_embedded_binaries")
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+default_embedded_binary(
+    name = "currentSenseApp",
+    srcs = ["currentSenseApp.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "AdapterLib",
+        "//lib:I2cLib",
+        "//lib:PAC1720DriverLib",
+        "//lib:DelayLib",
+        "@ElasticNodeMiddleware//:DebugLufaLib",
+        "//lib:SubSystem"
+    ],
+)
+
+cc_library(
+    name = "AdapterLib",
+	srcs = ["adapter_PAC1720/adapter_PAC1720.c"],
+    hdrs = ["adapter_PAC1720/adapter_PAC1720.h"],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//lib:PAC1720DriverLib",
+    ],
+	visibility = [
+		"//test:__pkg__",
+		"//test:__subpackages__",
+		"@CMock//CMock:__pkg__",
+	],
+)
+
+default_embedded_binary(
+    name = "blinkExample",
+    srcs = ["blinkExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+#        "//lib:DelayLib",
+#        "//lib:SubSystem"
+    ]
+)
