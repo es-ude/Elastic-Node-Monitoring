@@ -4,7 +4,7 @@
 #include "app/adapter_PAC1720/adapter_PAC1720.h"
 #include "src/i2cmaster/i2cmaster.h"
 #include "src/delay/user_delay.h"
-#include "lib/debug/debug.h"
+#include "src/debug/debug.h"
 #include <stdio.h>
 #include <avr/io.h>
 

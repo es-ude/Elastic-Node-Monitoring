@@ -2,15 +2,10 @@
 #include <inttypes.h>
 #include <stdint.h>
 #include "src/i2cmaster/i2cmaster.h"
-#include "lib/debug/debug.h"
-
-
-
 
 uint8_t state_of_main_mcu;
 uint8_t running_state;
 uint8_t sample_rate;
-
 
 uint8_t iic_read_from_device(uint8_t device_address)
 {
