@@ -14,7 +14,7 @@
 /******************************** Instances ******************************************/
 
 /*!
- * @brief  Application dependent instances. 
+ * @brief  Application dependent instances.
  */
 /* The struct holding communication function pointers used in this file */
 struct FIELD_BUS_INTERFACE *internal_fieldbus_interface;
@@ -23,83 +23,83 @@ struct FIELD_BUS_INTERFACE *internal_fieldbus_interface;
 delay_function_ptr internal_delay;
 
 /*!
- * @brief  Device structures holding the sensor configuration and results. 
+ * @brief  Device structures holding the sensor configuration and results.
  */
 /*! USB MONITOR device struct */
-struct PAC1720_device dev_USB_WIREL =
-{
-    /* Optional name for the device */
-	.DEV_name_opt                                           = "USB_WIRELESS_SENSOR",
-    /* Bus address */
-	.DEV_sensor_address                                     = 0x4A,
-    /* Global sensor configuration */
-    .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
-    /* Conversion rate of sensor */
-	.DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
-    /* One shot register of sensor */
-	.DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
-    /* Channel mask register of sensor*/
-    .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
-    /* Optional name for channel one */
-    .DEV_CH1_conf.CH_name_opt                               = "WIRELESS_VCC",
-    /* Resistance of sense resistor at channel one */
-    .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
-    /* Sampling time of current sense for channel one */
-    .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
-    /* Current sense sample averaging of channel one */
-    .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-    /* Full scale voltage range for current sensing */
-    .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
-    /* High limit of current for channel one */
-    .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
-    /* Low limit of current for channel one */
-	.DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
-    /* Sampling time of source voltage sense */
-    .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
-    /* Source voltage sample averaging of channel one */
-    .DEV_CH1_conf.CH_source_voltage_sampling_average_reg    = SAMPLE_AVERAGING_DISABLED,
-    /* Source voltage high limit for channel one */
-    .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
-    /* Source voltage low limit for channel one */
-	.DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
-    /* Optional name for channel two */
-    .DEV_CH2_conf.CH_name_opt                               = "USB_VCC",
-    /* Resistance of sense resistor at channel two */
-    .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.152f,
-    /* Sampling time of current sense for channel two*/
-    .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
-    /* Current sense sample averaging of channel two */
-    .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-    /* Full scale voltage range for current sensing */
-    .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
-    /* High limit of current for channel two */
-    .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
-    /* Low limit of current for channel two */
-	.DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
-    /* Sampling time of source voltage sense */
-    .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
-    /* Source voltage sample averaging of channel two */
-    .DEV_CH2_conf.CH_source_voltage_sampling_average_reg    = SAMPLE_AVERAGING_DISABLED,
-    /* Source voltage high limit for channel two */
-    .DEV_CH2_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
-    /* Source voltage low limit for channel two */
-	.DEV_CH2_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
-};
+struct PAC1720_device dev_12V_5V =
+        {
+                /* Optional name for the device */
+                .DEV_name_opt                                           = "12V_5V_Sensor",
+                /* Bus address */
+                .DEV_sensor_address                                     = 0x4D,
+                /* Global sensor configuration */
+                .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
+                /* Conversion rate of sensor */
+                .DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
+                /* One shot register of sensor */
+                .DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
+                /* Channel mask register of sensor*/
+                .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
+                /* Optional name for channel one */
+                .DEV_CH1_conf.CH_name_opt                               = "10V_VCC",
+                /* Resistance of sense resistor at channel one */
+                .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.15f,
+                /* Sampling time of current sense for channel one */
+                .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
+                /* Current sense sample averaging of channel one */
+                .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
+                /* Full scale voltage range for current sensing */
+                .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_80mV,
+                /* High limit of current for channel one */
+                .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
+                /* Low limit of current for channel one */
+                .DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
+                /* Sampling time of source voltage sense */
+                .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
+                /* Source voltage sample averaging of channel one */
+                .DEV_CH1_conf.CH_source_voltage_sampling_average_reg    = SAMPLE_AVERAGING_DISABLED,
+                /* Source voltage high limit for channel one */
+                .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
+                /* Source voltage low limit for channel one */
+                .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
+                /* Optional name for channel two */
+                .DEV_CH2_conf.CH_name_opt                               = "5V_VCC",
+                /* Resistance of sense resistor at channel two */
+                .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.01f,
+                /* Sampling time of current sense for channel two*/
+                .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
+                /* Current sense sample averaging of channel two */
+                .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
+                /* Full scale voltage range for current sensing */
+                .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_10mV,
+                /* High limit of current for channel two */
+                .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
+                /* Low limit of current for channel two */
+                .DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
+                /* Sampling time of source voltage sense */
+                .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
+                /* Source voltage sample averaging of channel two */
+                .DEV_CH2_conf.CH_source_voltage_sampling_average_reg    = SAMPLE_AVERAGING_DISABLED,
+                /* Source voltage high limit for channel two */
+                .DEV_CH2_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
+                /* Source voltage low limit for channel two */
+                .DEV_CH2_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
+        };
 
 /*! FPGA MONITOR device struct */
-struct PAC1720_device dev_FPGA_VCC = {
-        .DEV_name_opt                                           = "FPGA_VCC_SENSOR",
+struct PAC1720_device dev_MCU_AUX_VCC = {
+        .DEV_name_opt                                           = "MCU_AUX_VCC_SENSOR",
         .DEV_sensor_address                                     = 0x4F,
         .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
         .DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
         .DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
         .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
 
-        .DEV_CH1_conf.CH_name_opt                               = "FPGA_VCCAUX_MON",
-        .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
+        .DEV_CH1_conf.CH_name_opt                               = "MCU_VCC_MON",
+        .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.15f,
         .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
+        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
         .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -107,11 +107,11 @@ struct PAC1720_device dev_FPGA_VCC = {
         .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
 
-        .DEV_CH2_conf.CH_name_opt                               = "FPGA_VCCINT_MON",
+        .DEV_CH2_conf.CH_name_opt                               = "FPGA_AUX_MON",
         .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
+        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
         .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -121,19 +121,19 @@ struct PAC1720_device dev_FPGA_VCC = {
 };
 
 /*! SRAM and IO device struct */
-struct PAC1720_device dev_FPGA_SRAM = {
-        .DEV_name_opt                                           = "FPGA_SRAM_VCC",
-        .DEV_sensor_address                                     = 0x4D,
+struct PAC1720_device dev_INT_BRAM_VCC = {
+        .DEV_name_opt                                           = "dev_INT_BRAM_VCC",
+        .DEV_sensor_address                                     = 0x4A,
         .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
         .DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
         .DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
         .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
 
-        .DEV_CH1_conf.CH_name_opt                               = "SRAM_VDD",
+        .DEV_CH1_conf.CH_name_opt                               = "FPGA_VCC_INT_MON",
         .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
+        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
         .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -141,11 +141,11 @@ struct PAC1720_device dev_FPGA_SRAM = {
         .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
 
-        .DEV_CH2_conf.CH_name_opt                               = "FPGA_VCCIO_MON",
+        .DEV_CH2_conf.CH_name_opt                               = "FPGA_VCC_BRAM_MON",
         .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
+        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
         .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -155,19 +155,19 @@ struct PAC1720_device dev_FPGA_SRAM = {
 };
 
 /*! WIRELESS MONITOR device struct */
-struct PAC1720_device dev_DAUGHTER_MCU  = {
-        .DEV_name_opt                                           = "DAUGHTER_MCU_SENSOR",
+struct PAC1720_device dev_FPGA_IO  = {
+        .DEV_name_opt                                           = "FPGA_IO_SENSOR",
         .DEV_sensor_address                                     = 0x29,
         .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
         .DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
         .DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
         .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
 
-        .DEV_CH1_conf.CH_name_opt                               = "DAUGHTER_VCC",
+        .DEV_CH1_conf.CH_name_opt                               = "IO_0",
         .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
+        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
         .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -175,11 +175,11 @@ struct PAC1720_device dev_DAUGHTER_MCU  = {
         .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
 
-        .DEV_CH2_conf.CH_name_opt                               = "MCU_VCC",
+        .DEV_CH2_conf.CH_name_opt                               = "IO_1",
         .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
+        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
         .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -232,16 +232,16 @@ struct PAC1720_device dev_BATT= {
  * @fn adapter_fbus_write
  * @brief This function provides the interface to the bus write function that is required by the driver.
  *
- * @note A pointer to this function is stored in every device struct instance. The function utilizes the provided 
+ * @note A pointer to this function is stored in every device struct instance. The function utilizes the provided
  * bus communication struct.
  *
  * @param[in] sensor_address : Bus address of the sensor.
  * @param[in] reg_address : Register address of the sensor to be written to.
  * @param[in] data_ptr : Pointer to data that are to be written to the sensor.
  * @param[in] len : Length of the data to be written in bytes.
- * 
+ *
  * @return Result of API execution status
- * @retval 0 -> Success / != 0 value -> Error 
+ * @retval 0 -> Success / != 0 value -> Error
  */
 int8_t adapter_fbus_write(const uint8_t sensor_address, const uint8_t reg_address, uint8_t *data_ptr, const uint16_t len);
 
@@ -249,16 +249,16 @@ int8_t adapter_fbus_write(const uint8_t sensor_address, const uint8_t reg_addres
  * @fn adapter_fbus_read
  * @brief This function provides the interface to the bus read function that is required by the driver.
  *
- * @note A pointer to this function is stored in every device struct instance. The function utilizes the provided 
+ * @note A pointer to this function is stored in every device struct instance. The function utilizes the provided
  * bus communication struct.
  *
  * @param[in] sensor_address : Bus address of the sensor.
  * @param[in] reg_address : Register address of the sensor to be read from.
  * @param[in] data_ptr : Pointer to data that are to be read in from the sensor.
  * @param[in] len : Length of the data to be read in bytes.
- * 
+ *
  * @return Result of API execution status
- * @retval 0 -> Success / != 0 value -> Error 
+ * @retval 0 -> Success / != 0 value -> Error
  */
 int8_t adapter_fbus_read(const uint8_t sensor_address, const uint8_t reg_address, uint8_t *data_ptr, const uint16_t len);
 
@@ -270,7 +270,7 @@ int8_t adapter_fbus_read(const uint8_t sensor_address, const uint8_t reg_address
  * the user provided delay function.
  *
  * @param[in] period : The period of time in ms that should be delayed.
- *  
+ *
  */
 void adapter_delay(uint32_t period);
 
@@ -280,9 +280,9 @@ void adapter_delay(uint32_t period);
  *
  * @param[in] data_ptr : Pointer to data that are to be written to the sensor.
  * @param[in] len : Length of the data to be written in bytes.
- * 
+ *
  * @return Result of API execution status
- * @retval 0 -> Success / != 0 value -> Error 
+ * @retval 0 -> Success / != 0 value -> Error
  */
 int8_t fbus_write_loop(uint8_t *data_ptr, const uint16_t len);
 
@@ -292,9 +292,9 @@ int8_t fbus_write_loop(uint8_t *data_ptr, const uint16_t len);
  *
  * @param[in] data_ptr : Pointer to data that are to be read in from the sensor.
  * @param[in] len : Length of the data to be read in bytes.
- * 
+ *
  * @return Result of API execution status
- * @retval 0 -> Success / != 0 value -> Error 
+ * @retval 0 -> Success / != 0 value -> Error
  */
 int8_t fbus_read_loop(uint8_t *data_ptr, const uint16_t len);
 
@@ -303,9 +303,9 @@ int8_t fbus_read_loop(uint8_t *data_ptr, const uint16_t len);
  * @brief Helper function to check if mandatory values are set in the device struct.
  *
  * @param[in] dev_ptr : Pointer to a device struct instance.
- * 
- * @return Result 
- * @retval true -> Success / false -> Error 
+ *
+ * @return Result
+ * @retval true -> Success / false -> Error
  */
 bool check_mandatory_dev_settings(struct PAC1720_device *dev_ptr);
 
@@ -316,52 +316,52 @@ bool check_mandatory_dev_settings(struct PAC1720_device *dev_ptr);
  * @param[in/out] addresses : Pointer to an array with size of 32*sizeof(unit8_t).
  * @param[in] fieldbus_interface : Pointer to instance of struct FIELD_BUS_INTERFACE.
  * @param[in] loop_var : The actual loop count.
- * 
+ *
  * @return Result of API execution status
- * @retval 0 -> Success / != 0 value -> Error 
+ * @retval 0 -> Success / != 0 value -> Error
  */
 uint8_t poll_fbus(uint8_t *addresses, struct FIELD_BUS_INTERFACE *fieldbus_interface, uint8_t loop_var);
 
 /*!
  * @fn check_peripherals_initialized
- * 
+ *
  * @brief Helper function to check if the internal communication interface and delay function is initialized.
- * 
- * @return Result 
- * @retval true -> Success / false -> Error 
+ *
+ * @return Result
+ * @retval true -> Success / false -> Error
  */
 bool check_peripherals_initialized(void);
 
 
 /*!
  * @fn sensor_address_out_of_range
- * 
+ *
  * @brief Helper function to check if the sensor addresses of a device struct instance are valid.
- * 
+ *
  * @param[in] address : A sensor address.
- * 
- * @return Result 
- * @retval true -> Success / false -> Error 
+ *
+ * @return Result
+ * @retval true -> Success / false -> Error
  */
 bool sensor_address_out_of_range(const uint8_t address);
 
 /*!
  * @fn set_fieldbus_ptr
- * 
+ *
  * @brief Helper function to initialize the internal bus communication instance.
- * 
+ *
  * @param[in] external_fieldbus_interface : Pointer to an instance of struct FIELD_BUS_INTERFACE.
- * 
+ *
  */
 void set_fieldbus_ptr(struct FIELD_BUS_INTERFACE *external_fieldbus_interface);
 
 /*!
  * @fn set_delay_ptr
- * 
+ *
  * @brief Helper function to initialize the internal delay function.
- * 
+ *
  * @param[in] external_delay : Pointer to an implementation of a delay function.
- * 
+ *
  */
 void set_delay_ptr(delay_function_ptr external_delay);
 
@@ -377,7 +377,7 @@ void adapter_init_peripherals(struct FIELD_BUS_INTERFACE *fieldbus_interface, de
     {
         set_fieldbus_ptr(fieldbus_interface);
         set_delay_ptr(delay_fptr);
-    } 
+    }
 }
 
 /*!
@@ -472,7 +472,7 @@ uint8_t adapter_find_sensors(uint8_t *addresses, struct FIELD_BUS_INTERFACE *fie
             {
                 count++;
                 delay_fptr(10);
-            } 
+            }
         }
         /* If sensor has responsed count match results up */
         if(!no_match)
@@ -490,13 +490,13 @@ uint8_t adapter_find_sensors(uint8_t *addresses, struct FIELD_BUS_INTERFACE *fie
  * @brief Internal bus write function required by driver.
  */
 int8_t adapter_fbus_write(const uint8_t sensor_address, const uint8_t reg_address, uint8_t *data_ptr, const uint16_t len)
-{  
+{
     uint8_t result = PAC1720_OK;
     /* Send start communication (blocking) */
-    internal_fieldbus_interface->startWait((sensor_address << BUS_ADDRESS_SHIFT) + I2C_WRITE); 
+    internal_fieldbus_interface->startWait((sensor_address << BUS_ADDRESS_SHIFT) + I2C_WRITE);
     /* Write register address */
     result = internal_fieldbus_interface->write(reg_address);
-    if(result != PAC1720_OK) 
+    if(result != PAC1720_OK)
     {
         return result;
     }
@@ -512,19 +512,19 @@ int8_t adapter_fbus_write(const uint8_t sensor_address, const uint8_t reg_addres
  * @brief Internal bus read function required by driver.
  */
 int8_t adapter_fbus_read(const uint8_t sensor_address, const uint8_t reg_address, uint8_t *data_ptr, const uint16_t len)
-{   
+{
     uint8_t result = PAC1720_OK;
     /* Send start communication (blocking) */
     internal_fieldbus_interface->startWait((sensor_address << BUS_ADDRESS_SHIFT) + I2C_WRITE);
     /* Write register address */
-    result = internal_fieldbus_interface->write(reg_address); 
+    result = internal_fieldbus_interface->write(reg_address);
     if(result != PAC1720_OK)
     {
         return result;
     }
     /* Repeat start in read mode (blocking) */
     result = internal_fieldbus_interface->repStart((sensor_address << BUS_ADDRESS_SHIFT) + I2C_READ);
-    if(result != PAC1720_OK) 
+    if(result != PAC1720_OK)
     {
         return result;
     }
@@ -569,8 +569,8 @@ int8_t fbus_read_loop(uint8_t *data_ptr, const uint16_t len)
     for(uint16_t i = 0; i < len; i++)
     {   /** Read register and send ACK */
         if(i < len -1)  *data_ptr = internal_fieldbus_interface->readAck();
-        /* After the last read send NACK */
-        else            *data_ptr = internal_fieldbus_interface->readNak(); 
+            /* After the last read send NACK */
+        else            *data_ptr = internal_fieldbus_interface->readNak();
         data_ptr++;
     }
     return result;
@@ -607,11 +607,11 @@ bool check_peripherals_initialized(void)
 /*!
  * @brief Helper function checks if mandatory settings are provided.
  */
-bool check_mandatory_dev_settings(struct PAC1720_device *dev_ptr) 
+bool check_mandatory_dev_settings(struct PAC1720_device *dev_ptr)
 {
     /* Check if sensor address is valid and resistances are set */
-    if ( sensor_address_out_of_range(dev_ptr->DEV_sensor_address)               
-         || dev_ptr->DEV_CH1_conf.CH_current_sense_resistor_value == 0  
+    if ( sensor_address_out_of_range(dev_ptr->DEV_sensor_address)
+         || dev_ptr->DEV_CH1_conf.CH_current_sense_resistor_value == 0
          || dev_ptr->DEV_CH2_conf.CH_current_sense_resistor_value == 0 )
     {
         return false;
@@ -692,7 +692,7 @@ void print_raw_measurements_PAC1720(struct PAC1720_device * dev, debugWriteLine_
     sprintf(msg, "%s %x %x %x", dev->DEV_CH2_conf.CH_name_opt, get_channel_sense_voltage_read(&dev->DEV_CH2_measurements), get_channel_src_voltage_read(&dev->DEV_CH2_measurements), get_channel_pwr_ratio_read(&dev->DEV_CH2_measurements));
     debug_fptr(msg);
 }
- 
+
 ///*!
 // * @brief Prints the configuration of a sensor struct instance by the provided debug function.
 // */
@@ -775,19 +775,19 @@ void print_raw_measurements_PAC1720(struct PAC1720_device * dev, debugWriteLine_
 const void* get_ADAPTER_TEST_FPTR_FIELD(void)
 {
     static const void* test_fptr_field[] =  {
-                                                 (void*) &adapter_fbus_write,
-                                                 (void*) &adapter_fbus_read,
-                                                 (void*) &adapter_delay,
-                                                 (void*) &sensor_address_out_of_range,
-                                                 (void*) NULL,
-                                                 (void*) &poll_fbus,
-                                                 (void*) &set_fieldbus_ptr,
-                                                 (void*) &set_delay_ptr,
-                                                 (void*) &check_mandatory_dev_settings,
-                                                 (void*) &check_peripherals_initialized,
-                                                 (void*) &fbus_write_loop,
-                                                 (void*) &fbus_read_loop
-                                            };
+            (void*) &adapter_fbus_write,
+            (void*) &adapter_fbus_read,
+            (void*) &adapter_delay,
+            (void*) &sensor_address_out_of_range,
+            (void*) NULL,
+            (void*) &poll_fbus,
+            (void*) &set_fieldbus_ptr,
+            (void*) &set_delay_ptr,
+            (void*) &check_mandatory_dev_settings,
+            (void*) &check_peripherals_initialized,
+            (void*) &fbus_write_loop,
+            (void*) &fbus_read_loop
+    };
 
     return &test_fptr_field;
 }

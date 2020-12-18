@@ -12,7 +12,6 @@ import time
 import struct
 import subprocess
 import multiprocessing
-#from portConfigs import Config as portConfigs
 
 CURRENT_VOLTAGE = False
 if CURRENT_VOLTAGE:
@@ -23,8 +22,6 @@ else:
 READ_RAW = True
 DAUGHTER_POWERED = False
 
-path = "/Users/david/Desktop/Energy/"
-#elastic node port
 port = "/dev/tty.usbmodem1421401"
 baud = 500e3
 ylist = None
@@ -87,11 +84,11 @@ def datapoint(line):
 
 def read(filename=None):
     if filename is None:
-        fn = glob.glob(path + "data/*")
+        fn = glob.glob("data/*")
         fn.sort()
         fn = fn[-1]
     else:
-        fn = path + "data/{}.csv".format(filename)
+        fn = "data/{}.csv".format(filename)
 
     print ("reading", fn)
 
@@ -115,7 +112,7 @@ def readFloats(ser):
             # print("not target", int(b))
             target = 0
 
-    # print("reading")
+    #print("reading")
 
     data = ser.read((len(graphnames) - 1) * 4 * numValues )
 
@@ -166,6 +163,7 @@ def liveread(dataQueue):
 
             while trying:
                 new = readFloats(ser)
+                print(new)
                 if new is not None:
                     dataQueue.put(new)
 
@@ -225,7 +223,7 @@ def live():
 
                 np.set_printoptions(suppress=True)
 
-    # plotThread.join()
+        # plotThread.join()
         readThread.join()
     except KeyboardInterrupt:
         q.put(None)
@@ -306,13 +304,14 @@ def capture(filename=None):
 
     # ignore very first value
     first = True
-    
+
 
     try:
         while True: # for i in range(100):
-            
+
             if READ_RAW:
                 new = readFloats(ser)
+                print(new)
                 # if new is not None:
                 #     if not first:
                 #         outputfile.write("{}\n".format(new))

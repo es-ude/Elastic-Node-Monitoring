@@ -13,6 +13,7 @@ default_embedded_binary(
         "//:DelayLib",
         "@ElasticNodeMiddleware//:DebugLufaLib",
         "//:SubSystem"
+
     ],
 )
 
@@ -37,7 +38,20 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-#        "//:DelayLib",
-#        "//:SubSystem"
+        "//:DelayLib",
+        "//:SubSystem",
+        "@ElasticNodeMiddleware//:DebugLufaLib",
+    ]
+)
+
+default_embedded_binary(
+    name = "demoICAC",
+    srcs = ["demoICAC.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:DelayLib",
+        "//:SubSystem",
+        "@ElasticNodeMiddleware//:DebugLufaLib",
     ]
 )
