@@ -19,8 +19,8 @@ extern "C"
 #include "src/PAC1720_driver/PAC1720_driver.h"
 
 /** default values for the configuration settings **/
-#define DEFAULT_VSRC_SAMPLE_TIME VSRC_SAMPLE_TIME_2ms5
-#define DEFAULT_CURRENT_SAMPLE_TIME CURRENT_SAMPLE_TIME_2ms5
+#define DEFAULT_VSRC_SAMPLE_TIME VSRC_SAMPLE_TIME_20ms
+#define DEFAULT_CURRENT_SAMPLE_TIME CURRENT_SAMPLE_TIME_20ms
 //#define DEFAULT_VSENSE_RANGE VSRC_SENSE_RANGE_10mV
 #define DEFAULT_CURRENT_RANGE CURRENT_SENSE_RANGE_40mV
 #define DAUGHTER_POWERED 0
@@ -99,10 +99,10 @@ typedef void (*debugWriteStringLength_fptr) (char *s, uint16_t length);
 /** Sensor struct instances that are used in the current application setup.
  *  Located in the source file to keep the main function clear.
  */
-extern struct PAC1720_device        dev_12V_5V;
-extern struct PAC1720_device        dev_MCU_AUX_VCC;
-extern struct PAC1720_device        dev_INT_BRAM_VCC;
-extern struct PAC1720_device        dev_FPGA_IO;
+extern struct PAC1720_device        dev_USB_WIREL;
+extern struct PAC1720_device        dev_FPGA_VCC;
+extern struct PAC1720_device        dev_FPGA_SRAM;
+extern struct PAC1720_device        dev_DAUGHTER_MCU;
 extern struct PAC1720_device        dev_BATT;
 
 

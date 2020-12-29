@@ -1,5 +1,5 @@
 /*! @file  adapter_PAC1720.c
- *  @brief Adapter for PAC1720 sensor driver 
+ *  @brief Adapter for PAC1720 sensor driver
  */
 /*!
  * @defgroup adapter
@@ -26,12 +26,12 @@ delay_function_ptr internal_delay;
  * @brief  Device structures holding the sensor configuration and results.
  */
 /*! USB MONITOR device struct */
-struct PAC1720_device dev_12V_5V =
+struct PAC1720_device dev_USB_WIREL =
         {
                 /* Optional name for the device */
-                .DEV_name_opt                                           = "12V_5V_Sensor",
+                .DEV_name_opt                                           = "USB_WIRELESS_SENSOR",
                 /* Bus address */
-                .DEV_sensor_address                                     = 0x4D,
+                .DEV_sensor_address                                     = 0x4A,
                 /* Global sensor configuration */
                 .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
                 /* Conversion rate of sensor */
@@ -41,15 +41,15 @@ struct PAC1720_device dev_12V_5V =
                 /* Channel mask register of sensor*/
                 .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
                 /* Optional name for channel one */
-                .DEV_CH1_conf.CH_name_opt                               = "10V_VCC",
+                .DEV_CH1_conf.CH_name_opt                               = "WIRELESS_VCC",
                 /* Resistance of sense resistor at channel one */
-                .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.15f,
+                .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
                 /* Sampling time of current sense for channel one */
                 .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
                 /* Current sense sample averaging of channel one */
                 .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
                 /* Full scale voltage range for current sensing */
-                .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_80mV,
+                .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
                 /* High limit of current for channel one */
                 .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
                 /* Low limit of current for channel one */
@@ -63,15 +63,15 @@ struct PAC1720_device dev_12V_5V =
                 /* Source voltage low limit for channel one */
                 .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
                 /* Optional name for channel two */
-                .DEV_CH2_conf.CH_name_opt                               = "5V_VCC",
+                .DEV_CH2_conf.CH_name_opt                               = "USB_VCC",
                 /* Resistance of sense resistor at channel two */
-                .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.01f,
+                .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.152f,
                 /* Sampling time of current sense for channel two*/
                 .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
                 /* Current sense sample averaging of channel two */
                 .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
                 /* Full scale voltage range for current sensing */
-                .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_10mV,
+                .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
                 /* High limit of current for channel two */
                 .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
                 /* Low limit of current for channel two */
@@ -87,19 +87,19 @@ struct PAC1720_device dev_12V_5V =
         };
 
 /*! FPGA MONITOR device struct */
-struct PAC1720_device dev_MCU_AUX_VCC = {
-        .DEV_name_opt                                           = "MCU_AUX_VCC_SENSOR",
+struct PAC1720_device dev_FPGA_VCC = {
+        .DEV_name_opt                                           = "FPGA_VCC_SENSOR",
         .DEV_sensor_address                                     = 0x4F,
         .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
         .DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
         .DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
         .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
 
-        .DEV_CH1_conf.CH_name_opt                               = "MCU_VCC_MON",
-        .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.15f,
+        .DEV_CH1_conf.CH_name_opt                               = "FPGA_VCCAUX_MON",
+        .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
+        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
         .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -107,11 +107,11 @@ struct PAC1720_device dev_MCU_AUX_VCC = {
         .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
 
-        .DEV_CH2_conf.CH_name_opt                               = "FPGA_AUX_MON",
+        .DEV_CH2_conf.CH_name_opt                               = "FPGA_VCCINT_MON",
         .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
+        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
         .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -121,19 +121,19 @@ struct PAC1720_device dev_MCU_AUX_VCC = {
 };
 
 /*! SRAM and IO device struct */
-struct PAC1720_device dev_INT_BRAM_VCC = {
-        .DEV_name_opt                                           = "dev_INT_BRAM_VCC",
-        .DEV_sensor_address                                     = 0x4A,
+struct PAC1720_device dev_FPGA_SRAM = {
+        .DEV_name_opt                                           = "FPGA_SRAM_VCC",
+        .DEV_sensor_address                                     = 0x4D,
         .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
         .DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
         .DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
         .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
 
-        .DEV_CH1_conf.CH_name_opt                               = "FPGA_VCC_INT_MON",
+        .DEV_CH1_conf.CH_name_opt                               = "SRAM_VDD",
         .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
+        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
         .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -141,11 +141,11 @@ struct PAC1720_device dev_INT_BRAM_VCC = {
         .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
 
-        .DEV_CH2_conf.CH_name_opt                               = "FPGA_VCC_BRAM_MON",
+        .DEV_CH2_conf.CH_name_opt                               = "FPGA_VCCIO_MON",
         .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
+        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
         .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -155,19 +155,19 @@ struct PAC1720_device dev_INT_BRAM_VCC = {
 };
 
 /*! WIRELESS MONITOR device struct */
-struct PAC1720_device dev_FPGA_IO  = {
-        .DEV_name_opt                                           = "FPGA_IO_SENSOR",
+struct PAC1720_device dev_DAUGHTER_MCU  = {
+        .DEV_name_opt                                           = "DAUGHTER_MCU_SENSOR",
         .DEV_sensor_address                                     = 0x29,
         .DEV_configuration_reg                                  = CONFIG_ALL_CH_ENABLED,
         .DEV_conversion_rate_reg                                = CONVERSION_CONTINUOUS,
         .DEV_one_shot_reg                                       = ONE_SHOT_DEFAULT,
         .DEV_mask_reg                                           = MASK_ALL_CH_ALERT_ASSERT,
 
-        .DEV_CH1_conf.CH_name_opt                               = "IO_0",
+        .DEV_CH1_conf.CH_name_opt                               = "DAUGHTER_VCC",
         .DEV_CH1_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH1_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH1_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
+        .DEV_CH1_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
         .DEV_CH1_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,
@@ -175,11 +175,11 @@ struct PAC1720_device dev_FPGA_IO  = {
         .DEV_CH1_conf.CH_source_voltage_high_limit_reg          = SOURCE_VOLTAGE_HIGH_LIMIT_DEFAULT,
         .DEV_CH1_conf.CH_source_voltage_low_limit_reg           = SOURCE_VOLTAGE_LOW_LIMIT_DEFAULT,
 
-        .DEV_CH2_conf.CH_name_opt                               = "IO_1",
+        .DEV_CH2_conf.CH_name_opt                               = "MCU_VCC",
         .DEV_CH2_conf.CH_current_sense_resistor_value           = 0.82f,
         .DEV_CH2_conf.CH_current_sense_sampling_time_reg        = DEFAULT_CURRENT_SAMPLE_TIME,
         .DEV_CH2_conf.CH_current_sense_sampling_average_reg     = SAMPLE_AVERAGING_DISABLED,
-        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = CURRENT_SENSE_RANGE_40mV,
+        .DEV_CH2_conf.CH_current_sense_FSR_reg                  = DEFAULT_CURRENT_RANGE,
         .DEV_CH2_conf.CH_current_sense_high_limit_reg           = CURRENT_SENSE_HIGH_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_current_sense_low_limit_reg            = CURRENT_SENSE_LOW_LIMIT_DEFAULT,
         .DEV_CH2_conf.CH_source_voltage_sampling_time_reg       = DEFAULT_VSRC_SAMPLE_TIME,

@@ -163,7 +163,6 @@ def liveread(dataQueue):
 
             while trying:
                 new = readFloats(ser)
-                print(new)
                 if new is not None:
                     dataQueue.put(new)
 
@@ -179,7 +178,7 @@ def liveread(dataQueue):
             if ser is not None:
                 ser.close()
 
-
+#TODO: segmentations fault
 def live():
     q = multiprocessing.Queue()
 
@@ -215,6 +214,8 @@ def live():
                 pp.cla()
                 pp.title("power")
                 pp.semilogy(arr) #[:, :10])
+                #print(min, max)
+                #TODO: non positve number
                 pp.ylim([min/2, max*2])
                 pp.legend(graphnames)
                 pp.grid()
@@ -311,7 +312,6 @@ def capture(filename=None):
 
             if READ_RAW:
                 new = readFloats(ser)
-                print(new)
                 # if new is not None:
                 #     if not first:
                 #         outputfile.write("{}\n".format(new))
@@ -407,7 +407,7 @@ def show():
     pp.show()
 
 def resetMCU():
-    subprocess.call("avrdude -p atmega32u4 -P /dev/tty.usbmodem1461201 -c stk500v2".split(' '))
+    subprocess.call("avrdude -p atmega32u4 -P /dev/tty.usbmodem1421201 -c stk500v2".split(' '))
 
 if __name__ == "__main__":
 
@@ -430,7 +430,6 @@ if __name__ == "__main__":
         reset = "reset" in sys.argv[1]
         drawLive = "live" in sys.argv[1]
         printDebug = "print" in sys.argv[1]
-    print(deb, cap)
     if drawLive:
         resetMCU()
         live()

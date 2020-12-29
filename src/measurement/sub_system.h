@@ -1,12 +1,7 @@
 #ifndef SUB_SYSTEM_H
 #define SUB_SYSTEM_H
 
-#define SAMPLE_RATE_STANDARD 100
-#define SAMPLE_RATE_SEND_INPUT 2.5
-#define SAMPLE_RATE_RECONFIG 10
-#define SAMPLE_RATE_EXEC 20
-#define SAMPLE_RATE_RECEIVE_RESULT 50
-//...
+#define RECHECK 1
 
 #define OWN_STATE 0
 
@@ -30,36 +25,22 @@
 
 uint8_t iic_read_from_device(uint8_t device_address);
 
-#if OWN_STATE == 0
-void update_state_main_mcu(uint8_t *state_of_main_mcu);
-#endif
 
-#if OWN_STATE == 0
-void update_running_state(uint8_t *running_state, uint8_t *state_of_main_mcu);
-
-void update_sample_rate(uint8_t *sample_rate, uint8_t *state_of_main_mcu);
-#endif
 
 #if OWN_STATE
-void update_running_state(uint8_t *running_state, uint8_t state_variable);
+void update_running_state(uint8_t state_variable);
+#else
+void update_running_state();
+
+void update_sample_rate();
+
+void update_state_main_mcu();
 #endif
 
-
+//void adapt_sample_rate(uint8_t *sample_rate);
 
 uint8_t get_running_state();
 
 uint8_t get_sample_rate();
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif

@@ -33,6 +33,7 @@ cc_library(
      copts = cpu_frequency_flag(),
      deps = [
      "I2cLib",
+     "PAC1720DriverLib",
      "@ElasticNodeMiddleware//:DebugLufaLib",
      ]
 )
