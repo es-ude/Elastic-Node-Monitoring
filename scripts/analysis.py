@@ -12,6 +12,7 @@ import time
 import struct
 import subprocess
 import multiprocessing
+from config import Configs
 
 CURRENT_VOLTAGE = False
 if CURRENT_VOLTAGE:
@@ -22,7 +23,8 @@ else:
 READ_RAW = True
 DAUGHTER_POWERED = False
 
-port = "/dev/tty.usbmodem1421401"
+port = Configs.portToElasticnode
+print(port)
 baud = 500e3
 ylist = None
 datastore = list()
@@ -84,11 +86,11 @@ def datapoint(line):
 
 def read(filename=None):
     if filename is None:
-        fn = glob.glob("data/*")
+        fn = glob.glob(Configs.pathToProject + "data/*")
         fn.sort()
         fn = fn[-1]
     else:
-        fn = "data/{}.csv".format(filename)
+        fn = Configs.pathToProject + "data/{}.csv".format(filename)
 
     print ("reading", fn)
 
@@ -292,15 +294,15 @@ def capture(filename=None):
     print("starting capture")
     HEX = False
     ser = serial.Serial(port, baud)
-
     try:
-        os.mkdir("data")
+        os.mkdir(Configs.pathToProject + "data")
     except OSError:
         pass
-    if filename is None:
-        fn = "data/{}.csv".format(datetime.now())
+    print(filename)
+    if filename is None or filename == Configs.portToProgrammer:
+        fn = Configs.pathToProject + "data/{}.csv".format(datetime.now())
     else:
-        fn = "data/{}.csv".format(filename)
+        fn = Configs.pathToProject + "data/{}.csv".format(filename)
     outputfile = open(fn, 'w')
 
     # ignore very first value
@@ -407,7 +409,7 @@ def show():
     pp.show()
 
 def resetMCU():
-    subprocess.call("avrdude -p atmega32u4 -P /dev/tty.usbmodem1421201 -c stk500v2".split(' '))
+    subprocess.call(("avrdude -p atmega32u4 -P " + Configs.portToProgrammer + " -c stk500v2").split(' '))
 
 if __name__ == "__main__":
 

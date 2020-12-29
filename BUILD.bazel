@@ -60,8 +60,13 @@ py_binary(
     ],
 )
 
+py_library(
+    name = "config",
+    srcs = ["scripts/config.py"],
+)
+
 py_binary(
     name = "analysis",
     srcs = ["scripts/analysis.py"],
-    deps = [],
+    deps = ["config",],
 )

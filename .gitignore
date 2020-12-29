@@ -2,3 +2,4 @@
 .clwb/
 bazel-*
 user.bazelrc
+scripts/config.py
