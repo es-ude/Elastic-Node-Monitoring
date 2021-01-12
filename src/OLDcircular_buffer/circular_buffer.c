@@ -2,18 +2,14 @@
 #include "lib/debug/debug.h"
 
 
-void circBufInit(circularBuffer *c, uint16_t size)
-{
+void circBufInit(circularBuffer *c, uint16_t size) {
     // allocate buffer
     c->buffer = (uint8_t *) malloc(size);
-    if (!c->buffer)
-    {
+    if (!c->buffer) {
         debugWriteString("Could not allocate buffer of size ");
         // debugWriteDec16(size);
         // debugNewLine();
-    }
-    else
-    {
+    } else {
         // debugWriteString("allocated buffer at ");
         // debugWriteHex16((uint16_t) c->buffer);
         // init head and tail pointers
@@ -31,14 +27,12 @@ void circBufInit(circularBuffer *c, uint16_t size)
     }
 }
 
-void circBufFree(circularBuffer *c)
-{
+void circBufFree(circularBuffer *c) {
     if (c->buffer)
         free(c->buffer);
 }
 
-uint8_t circBufPush(circularBuffer *c, uint8_t data)
-{
+uint8_t circBufPush(circularBuffer *c, uint8_t data) {
     cli();
 
     // check if buffer is full
@@ -82,14 +76,13 @@ uint8_t circBufPush(circularBuffer *c, uint8_t data)
     return 1;  // return success to indicate successful push.
 }
 
-uint8_t circBufPop(circularBuffer *c, uint8_t *data)
-{
+uint8_t circBufPop(circularBuffer *c, uint8_t *data) {
     // check if available
     if (!c->currentLen)
         return 0;
 
     // uint8_t gi = interruptStatus();
-    
+
     // if (gi)
     cli();
     // data exists
@@ -108,12 +101,12 @@ uint8_t circBufPop(circularBuffer *c, uint8_t *data)
     return 1;  // return success to indicate successful pop.
 }
 
-uint16_t circBufSpace(circularBuffer *c)
-{
+uint16_t circBufSpace(circularBuffer *c) {
     return c->maxLen - c->currentLen;
 }
 
 uint16_t circBufCount(circularBuffer *c) { return c->currentLen; }
+
 uint16_t circBufCountObjects(circularBuffer *c, uint16_t size) { return circBufCount(c) / size; }
 // uint8_t circBufCountFloat(circBuf_t *c) { return c->currentLen / sizeof(float); }
 // uint8_t circBufCount16(circBuf_t *c) { return c->currentLen / sizeof(uint16_t); }
