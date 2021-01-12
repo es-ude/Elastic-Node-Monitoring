@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <avr/io.h>
 
-#include "src/measurement/sub_system.h"
+#include "src/elasticNodeMonitoring/elasticNodeMonitoring.h"
 
 
 void adapt_sample_rate();

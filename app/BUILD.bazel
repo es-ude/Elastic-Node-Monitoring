@@ -12,7 +12,7 @@ default_embedded_binary(
         "//:PAC1720DriverLib",
         "//:DelayLib",
         "@ElasticNodeMiddleware//:DebugLufaLib",
-        "//:SubSystem"
+        "//:ElasticNodeMonitoringLib"
 
     ],
 )
@@ -39,7 +39,7 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:DelayLib",
-        "//:SubSystem",
+        "//:ElasticNodeMonitoringLib",
         "@ElasticNodeMiddleware//:DebugLufaLib",
     ]
 )
@@ -51,7 +51,7 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:DelayLib",
-        "//:SubSystem",
+        "//:ElasticNodeMonitoringLib",
         "@ElasticNodeMiddleware//:DebugLufaLib",
     ]
 )
