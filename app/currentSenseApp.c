@@ -174,32 +174,50 @@ int main(void)
 
 void powerMeasurement(void)
 {
+
     ptr = (float*)(outputBuffer + 3);
 
+    //TODO: Why fails after some time
+
+    // Fails third
+    /*
     meas_fail = adapter_get_measurements_PAC1720(&dev_USB_WIREL);
     if (meas_fail){
+        debugWriteString(meas_fail);
+        debugWriteString("Fehler 1");
         MON1_LED_ON();
         MON2_LED_ON();
         return;
-    }
+    }*/
+
+    // Fails second
+    /*
     meas_fail = adapter_get_measurements_PAC1720(&dev_FPGA_VCC);
     if (meas_fail){
+        debugWriteString("Fehler 2");
         MON1_LED_ON();
         MON2_LED_ON();
         return;
-    }
+    }*/
+
+    // Does not sem to fail
     meas_fail = adapter_get_measurements_PAC1720(&dev_DAUGHTER_MCU);
     if (meas_fail){
+        debugWriteString("Fehler 3");
         MON1_LED_ON();
         MON2_LED_ON();
         return;
     }
-    meas_fail = adapter_get_measurements_PAC1720(&dev_FPGA_SRAM);
+
+    // Fails first
+    /*meas_fail = adapter_get_measurements_PAC1720(&dev_FPGA_SRAM);
     if (meas_fail){
+        debugWriteString("Fehler 4");
         MON1_LED_ON();
         MON2_LED_ON();
         return;
-    }
+    }*/
+
 #if DAUGHTER_POWERED
     meas_fail = adapter_get_measurements_PAC1720(&dev_BATT);
     if (meas_fail)
@@ -214,21 +232,35 @@ void powerMeasurement(void)
     *ptr = running_state;//
     ptr++;
 #endif
+
+    /*
     *ptr = dev_USB_WIREL.DEV_CH1_measurements.POWER; // wireless
     ptr++;
     *ptr = dev_USB_WIREL.DEV_CH2_measurements.POWER; // usb
     ptr++;
+     */
+
+    /*
     *ptr = dev_FPGA_VCC.DEV_CH1_measurements.POWER; // fpga aux
     ptr++;
     *ptr = dev_FPGA_VCC.DEV_CH2_measurements.POWER; // fpga int
     ptr++;
+     */
+
+    // Fails ???
+    /*
     *ptr = dev_DAUGHTER_MCU.DEV_CH1_measurements.POWER; // daughter
     ptr++;
     *ptr = dev_DAUGHTER_MCU.DEV_CH2_measurements.POWER; // mcu
+    */
+
+    /*
     ptr++;
     *ptr = dev_FPGA_SRAM.DEV_CH1_measurements.POWER; // sram
     ptr++;
     *ptr = dev_FPGA_SRAM.DEV_CH2_measurements.POWER; // fpga io
+    */
+
 #if DAUGHTER_POWERED
     ptr++;
     *ptr = dev_BATT.DEV_CH1_measurements.POWER; // charge
@@ -280,15 +312,10 @@ void powerMeasurement(void)
 #endif
 #endif
 
-//    debugWriteFloatFull(dev_FPGA_VCC.DEV_CH1_measurements.POWER);
-//    debugNewLine();
-
 
     debugWriteStringLength(outputBuffer, (NUM_SENSORS*2*PRINT_VARIABLES + PRINT_STATE)*sizeof(float)+8);
+
 }
-
-
-
 
 
 /* Initialize hardware */
@@ -372,7 +399,7 @@ void print_error(int8_t res){
     for (;;)
     {
         char msg[64];
-        sprintf(msg, "Failure while initializing: %d\r\n", res);
+        sprintf(msg, "!!!Failure while initializing: %d\r\n", res);
         debugWriteLine(msg);
         external_delay_function(1000);
     }
@@ -396,7 +423,7 @@ void adapt_sample_rate(){
             dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_2ms5;
 
             res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
+            if(res != PAC1720_OK) (res);
             res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
             if(res != PAC1720_OK) print_error(res);
             res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);

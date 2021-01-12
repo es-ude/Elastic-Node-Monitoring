@@ -103,21 +103,22 @@ def readFloats(ser):
     # wait for double FF
     target = 0
     while target < 3:
+        #print("In while", target, ";", end="")
         b, = struct.unpack('B', ser.read(1))
         if int(b) == target + 1:
-            # print ("found one", int(b))
+            print ("found:", int(b), end="; ")
             target += 1
         elif int(b) == target:
-            # print ("same again")
+            print ("same again")
             pass
         else:
-            # print("not target", int(b))
+            print("not target", int(b), end = " ")
             target = 0
 
-    #print("reading")
+    print("reading")
 
     data = ser.read((len(graphnames) - 1) * 4 * numValues )
-
+    print(data)
     tail = struct.unpack('BBBBB', ser.read(5))
     numzero = 0
 
@@ -132,6 +133,7 @@ def readFloats(ser):
     if tailCorrect == 5:
 
         dp = Measurement(line=data)
+        print(dp)
         return dp
     else:
         print("incorrect read...")
@@ -218,15 +220,20 @@ def live():
                 pp.semilogy(arr) #[:, :10])
                 #print(min, max)
                 #TODO: non positve number
-                pp.ylim([min/2, max*2])
+
+                pp.ylim([min/2, int(max*2)])
+
                 pp.legend(graphnames)
                 pp.grid()
-                pp.draw()
-                pp.pause(0.1)
 
+                pp.draw()
+                print("before")
+                pp.pause(0.1)
+                print("after")
                 np.set_printoptions(suppress=True)
 
         # plotThread.join()
+        print("ende")
         readThread.join()
     except KeyboardInterrupt:
         q.put(None)
@@ -275,9 +282,13 @@ def printout():
             ser = serial.Serial(port, baud)
 
             while trying:
+                print("Waiting for data")
                 new = readFloats(ser)
+
                 if new is not None:
                     print(new)
+                else:
+                    print("NONE")
 
             sys.stdout.flush()
         except serial.serialutil.SerialException:
@@ -288,7 +299,10 @@ def printout():
             print("key exc")
         finally:
             print('done')
-            ser.close()
+            try:
+                ser.close()
+            except:
+                print("No connection to close.")
 
 def capture(filename=None):
     print("starting capture")
