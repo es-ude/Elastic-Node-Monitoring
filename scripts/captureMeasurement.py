@@ -105,13 +105,13 @@ def readFloats(ser):
     while target < 3:
         b, = struct.unpack('B', ser.read(1))
         if int(b) == target + 1:
-            # print ("found one", int(b))
+            #print ("found one", int(b), end=" ")
             target += 1
         elif int(b) == target:
             # print ("same again")
             pass
         else:
-            # print("not target", int(b))
+            #print("not target", int(b))
             target = 0
 
     #print("reading")
@@ -126,7 +126,7 @@ def readFloats(ser):
         if tail[tailCorrect] == 5 - tailCorrect:
             tailCorrect += 1
         else:
-            print ("wrong tail")
+            print("wrong tail")
             break
 
     if tailCorrect == 5:
@@ -270,7 +270,7 @@ def printout():
     HEX = False
     trying = True
 
-    while trying: # for i in range(100):
+    while trying:  # for i in range(100):
         try:
             ser = serial.Serial(port, baud)
 
@@ -432,6 +432,7 @@ if __name__ == "__main__":
         reset = "reset" in sys.argv[1]
         drawLive = "live" in sys.argv[1]
         printDebug = "print" in sys.argv[1]
+        graph = "graph" in sys.argv[1]
     if drawLive:
         resetMCU()
         live()
@@ -443,10 +444,12 @@ if __name__ == "__main__":
         capture(filename)
     elif reset:
         resetMCU()
-    else:
+    elif graph:
         read(filename)
         collect()
         # plot()
         histograms()
         fitModels()
         show()
+    else:
+        print("No argument given.")

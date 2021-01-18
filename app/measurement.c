@@ -1,5 +1,3 @@
-//#include "include/currentSenseApp.h"
-
 /************************************** Dependencies to be injected ************************************/
 #include "app/adapter_PAC1720/adapter_PAC1720.h"
 #include "src/i2cmaster/i2cmaster.h"
@@ -64,9 +62,6 @@ extern uint8_t sample_rate;
 #endif
 
 
-
-
-
 int main(void)
 {
     /* Init the hardware, print error if fail */
@@ -88,9 +83,6 @@ int main(void)
     outputBuffer[(NUM_SENSORS*2*PRINT_VARIABLES+PRINT_STATE)*sizeof(float)+8 -3] = 3;
     outputBuffer[(NUM_SENSORS*2*PRINT_VARIABLES+PRINT_STATE)*sizeof(float)+8 -2] = 2;
     outputBuffer[(NUM_SENSORS*2*PRINT_VARIABLES+PRINT_STATE)*sizeof(float)+8 -1] = 1;
-
-
-    uint16_t timer_1_sec = 0;
 
     DDRD |= ((1<<2)|(1<<3));
     MON1_LED_OFF();
@@ -382,187 +374,23 @@ void print_error(int8_t res){
 void adapt_sample_rate(){
 
     int8_t res;
-    switch (sample_rate)
-    {
-        case 0:
-            /* use CURRENT_SAMPLE_TIME_2ms5 */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_2ms5;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_2ms5;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_2ms5;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_2ms5;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_2ms5;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_2ms5;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_2ms5;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_2ms5;
 
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        case 1:
-            /* use CURRENT_SAMPLE_TIME_5ms */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_5ms;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_5ms;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_5ms;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_5ms;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_5ms;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_5ms;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_5ms;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_5ms;
+    dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = sample_rate;
+    dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = sample_rate;
+    dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = sample_rate;
+    dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = sample_rate;
+    dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = sample_rate;
+    dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = sample_rate;
+    dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = sample_rate;
+    dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = sample_rate;
 
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        case 2:
-            /* use CURRENT_SAMPLE_TIME_10ms */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_10ms;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_10ms;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_10ms;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_10ms;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_10ms;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_10ms;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_10ms;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_10ms;
-
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        case 3:
-            /* use CURRENT_SAMPLE_TIME_20ms */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_20ms;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_20ms;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_20ms;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_20ms;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_20ms;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_20ms;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_20ms;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_20ms;
-
-            int8_t res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        case 4:
-            /* use CURRENT_SAMPLE_TIME_40ms */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_40ms;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_40ms;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_40ms;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_40ms;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_40ms;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_40ms;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_40ms;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_40ms;
-
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        case 5:
-            /* use CURRENT_SAMPLE_TIME_80ms */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_80ms;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_80ms;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_80ms;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_80ms;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_80ms;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_80ms;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_80ms;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_80ms;
-
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        case 6:
-            /* use CURRENT_SAMPLE_TIME_160ms */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_160ms;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_160ms;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_160ms;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_160ms;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_160ms;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_160ms;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_160ms;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_160ms;
-
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        case 7:
-            /* use CURRENT_SAMPLE_TIME_320ms */
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_320ms;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_320ms;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_320ms;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_320ms;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_320ms;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_320ms;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_320ms;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_320ms;
-
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-        default:
-            dev_USB_WIREL.DEV_CH1_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_DEFAULT;
-            dev_USB_WIREL.DEV_CH2_conf.CH_current_sense_sampling_time_reg  = CURRENT_SAMPLE_TIME_DEFAULT;
-            dev_FPGA_VCC.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_DEFAULT;
-            dev_FPGA_VCC.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_DEFAULT;
-            dev_FPGA_SRAM.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_DEFAULT;
-            dev_FPGA_SRAM.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_DEFAULT;
-            dev_DAUGHTER_MCU.DEV_CH1_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_DEFAULT;
-            dev_DAUGHTER_MCU.DEV_CH2_conf.CH_current_sense_sampling_time_reg = CURRENT_SAMPLE_TIME_DEFAULT;
-
-            res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
-            if(res != PAC1720_OK) print_error(res);
-            res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
-            if(res != PAC1720_OK) print_error(res);
-            break;
-    }
+    res = adapter_init_PAC1720_user_defined(&dev_USB_WIREL);
+    if(res != PAC1720_OK) print_error(res);
+    res = adapter_init_PAC1720_user_defined(&dev_FPGA_VCC);
+    if(res != PAC1720_OK) print_error(res);
+    res = adapter_init_PAC1720_user_defined(&dev_FPGA_SRAM);
+    if(res != PAC1720_OK) print_error(res);
+    res = adapter_init_PAC1720_user_defined(&dev_DAUGHTER_MCU);
+    if(res != PAC1720_OK) print_error(res);
 
 }

@@ -2,8 +2,8 @@ load("@AvrToolchain//:helpers.bzl", "default_embedded_binary", "default_embedded
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 default_embedded_binary(
-    name = "currentSenseApp",
-    srcs = ["currentSenseApp.c"],
+    name = "measurement",
+    srcs = ["measurement.c"],
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
@@ -13,7 +13,6 @@ default_embedded_binary(
         "//:DelayLib",
         "@ElasticNodeMiddleware//:DebugLufaLib",
         "//:ElasticNodeMonitoringLib"
-
     ],
 )
 
@@ -35,18 +34,6 @@ cc_library(
 default_embedded_binary(
     name = "blinkExample",
     srcs = ["blinkExample.c"],
-    copts = cpu_frequency_flag(),
-    uploader = "@AvrToolchain//:avrdude_upload_script",
-    deps = [
-        "//:DelayLib",
-        "//:ElasticNodeMonitoringLib",
-        "@ElasticNodeMiddleware//:DebugLufaLib",
-    ]
-)
-
-default_embedded_binary(
-    name = "demoICAC",
-    srcs = ["demoICAC.c"],
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
