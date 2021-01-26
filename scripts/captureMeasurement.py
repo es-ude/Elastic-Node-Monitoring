@@ -29,19 +29,21 @@ baud = 500e4
 ylist = None
 datastore = list()
 if DAUGHTER_POWERED:
-    graphnames = ["wireless", "usb", "fpgaaux", "fpgaint", "daughter", "mcu", "fpgasram", "fpgaio", "charge", "battery", "total"]
+    graphnames = ["wireless", "usb", "fpgaaux", "fpgaint", "daughter", "mcu", "fpgasram", "fpgaio", "charge", "battery",
+                  "total"]
 else:
-    graphnames = ["stateMCU","wireless", "usb", "fpgaaux", "fpgaint", "daughter", "mcu", "fpgasram", "fpgaio", "total"]
+    graphnames = ["stateMCU", "wireless", "usb", "fpgaaux", "fpgaint", "daughter", "mcu", "fpgasram", "fpgaio", "total"]
+
 
 class Measurement:
-
     # usb, daughter, wireless, mcu, fpgaaux, fpgaint, fpgasram, fpgaio, charge, battery = [None] * (len(graphnames) - 1)
     values = None
     power = None
     calculatedPower = None
     total = None
 
-    def __init__(self, values=None, line=None): # usb=None, daughter=None, wireless=None, mcu=None, fpgaaux=None, fpgaint=None, fpgasram=None, fpgaio=None, charge=None, battery=None
+    def __init__(self, values=None,
+                 line=None):  # usb=None, daughter=None, wireless=None, mcu=None, fpgaaux=None, fpgaint=None, fpgasram=None, fpgaio=None, charge=None, battery=None
         if line is not None:
             if len(line) != 4 * numValues * (len(graphnames) - 1):
                 print("Not enough bytes in line:", len(line))
@@ -67,7 +69,9 @@ class Measurement:
         return (("{:.4f}," * (len(self.values))).format(*self.values))[:-1] + ",{:.4f}".format(self.total)
 
     def tuple(self):
-        return (self.usb, self.daughter, self.wireless, self.mcu, self.fpgaaux, self.fpgaint, self.fpgasram, self.fpgaio, self.charge, self.battery)
+        return (
+        self.usb, self.daughter, self.wireless, self.mcu, self.fpgaaux, self.fpgaint, self.fpgasram, self.fpgaio,
+        self.charge, self.battery)
 
     def array(self):
         if self.values is not None:
@@ -79,10 +83,12 @@ class Measurement:
             return []
         # return [self.usb, self.daughter, self.wireless, self.mcu, self.fpgaaux, self.fpgaint, self.fpgasram, self.fpgaio, self.charge, self.battery]
 
+
 def datapoint(line):
     # print("usb {} monitor {} wireless {} mcu {} vccaux {} vccint {}".format(usb, monitor, wireless, mcu, vccaux, vccint))
-    measurement = Measurement(line) # usb, monitor, wireless, mcu, fpgaaux, fpgaint)
+    measurement = Measurement(line)  # usb, monitor, wireless, mcu, fpgaaux, fpgaint)
     datastore.append(measurement)
+
 
 def read(filename=None):
     if filename is None:
@@ -92,35 +98,35 @@ def read(filename=None):
     else:
         fn = Configs.pathToProject + "data/{}.csv".format(filename)
 
-    print ("reading", fn)
+    print("reading", fn)
 
     with open(fn) as datafile:
         for line in datafile:
             # print ([float(value) for value in line.split(',')[:-1]])
             datastore.append(Measurement(values=[float(value) for value in line.split(',')[:-1]]))
 
+
 def readFloats(ser):
     # wait for double FF
     target = 0
     while target < 3:
-        
+
         b, = struct.unpack('B', ser.read(1))
         if int(b) == target + 1:
-            #print ("found one", int(b), end=" ")
+            # print ("found one", int(b), end=" ")
             target += 1
         elif int(b) == target:
             # print ("same again")
             pass
         else:
-            #print("not target", int(b))
+            # print("not target", int(b))
             target = 0
 
     # print("reading")
 
-    data = ser.read((len(graphnames) - 1) * 4 * numValues )
+    data = ser.read((len(graphnames) - 1) * 4 * numValues)
 
     tail = struct.unpack('BBBBB', ser.read(5))
-    numzero = 0
 
     tailCorrect = 0
     while tailCorrect < 5:
@@ -159,10 +165,9 @@ def readFloats(ser):
 def liveread(dataQueue):
     trying = True
     ser = None
-    while trying: # for i in range(100):
+    while trying:  # for i in range(100):
         try:
             ser = serial.Serial(port, baud)
-
 
             while trying:
                 new = readFloats(ser)
@@ -181,7 +186,8 @@ def liveread(dataQueue):
             if ser is not None:
                 ser.close()
 
-#TODO: segmentations fault
+
+# TODO: segmentation fault
 def live():
     q = multiprocessing.Queue()
 
@@ -207,20 +213,20 @@ def live():
                 max = np.max(arr)
                 min = np.min(arr)
 
-                pp.subplot(1,2,1)
+                pp.subplot(1, 2, 1)
                 pp.cla()
                 pp.title("mcu")
-                pp.plot(arr[:, 5]) #[:, :10])
+                pp.plot(arr[:, 5])  # [:, :10])
                 # pp.ylim([min/2, max*2])
                 pp.grid()
-                pp.subplot(1,2,2)
+                pp.subplot(1, 2, 2)
                 pp.cla()
                 pp.title("power")
-                pp.semilogy(arr) #[:, :10])
-                #print(min, max)
-                #TODO: non positve number
+                pp.semilogy(arr)  # [:, :10])
+                # print(min, max)
+                # TODO: non positve number
 
-                pp.ylim([min/2, int(max*2)])
+                pp.ylim([min / 2, int(max * 2)])
 
                 pp.legend(graphnames)
                 pp.grid()
@@ -235,20 +241,18 @@ def live():
         q.put(None)
 
 
-
 def debug():
     print("starting debug")
-    HEX = False
     trying = True
     ser = None
 
-    while trying: # for i in range(100):
+    while trying:  # for i in range(100):
         try:
             ser = serial.Serial(port, baud)
 
             while trying:
                 # new = readFloats(ser)
-                print (ser.read(10))
+                print(ser.read(10))
                 # if new is not None:
                 #     print (new)
 
@@ -268,9 +272,9 @@ def debug():
             if ser is not None:
                 ser.close()
 
+
 def printout():
     print("starting debug")
-    HEX = False
     trying = True
 
     while trying:  # for i in range(100):
@@ -296,9 +300,9 @@ def printout():
             except:
                 print("No connection to close.")
 
+
 def capture(filename=None):
     print("starting capture")
-    HEX = False
     ser = serial.Serial(port, baud)
     try:
         os.mkdir(Configs.pathToProject + "data")
@@ -314,9 +318,8 @@ def capture(filename=None):
     # ignore very first value
     first = True
 
-
     try:
-        while True: # for i in range(100):
+        while True:  # for i in range(100):
 
             if READ_RAW:
                 new = readFloats(ser)
@@ -345,7 +348,6 @@ def capture(filename=None):
                     # outputfile.write("{}\n".format(graphnames))
                     first = False
 
-
             # sys.stdout.write(str(ser.read(1)))
             sys.stdout.flush()
 
@@ -356,6 +358,7 @@ def capture(filename=None):
         ser.close()
         outputfile.close()
 
+
 def collect():
     global ylist
     ylist = list()
@@ -363,6 +366,7 @@ def collect():
     for point in datastore:
         ylist.append(point.array())
     ylist = np.array(ylist)
+
 
 def plot():
     # print(np.array(ylist))
@@ -373,7 +377,10 @@ def plot():
     # pp.plot(np.sum(ylist[:, 1:], axis=1))
     pp.legend(graphnames)
 
+
 ax2 = None
+
+
 def histograms():
     pp.figure(2)
     bins = np.arange(0, 0.5, 0.01)
@@ -387,10 +394,10 @@ def histograms():
     # print(np.average(values), np.std(values))
 
 
-# Define model function to be used to fit to the data above:
 def gauss(x, *p):
+    """ Define model function to be used to fit to the data above """
     A, mu, sigma = p
-    return A*np.exp(-(x-mu)**2/(2.*sigma**2))
+    return A * np.exp(-(x - mu) ** 2 / (2. * sigma ** 2))
 
 
 def fitModels():
@@ -414,15 +421,15 @@ def fitModels():
 def show():
     pp.show()
 
+
 def resetMCU():
     subprocess.call(("avrdude -p atmega32u4 -P " + Configs.portToProgrammer + " -c stk500v2").split(' '))
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     deb = False
     cap = True
     reset = False
-    # print (sys.argv)
     drawLive = False
     printDebug = False
 
@@ -432,7 +439,6 @@ if __name__ == "__main__":
         filename = None
 
     if len(sys.argv) > 1:
-        # print (sys.argv)
         deb = "debug" in sys.argv[1]
         cap = "capture" in sys.argv[1]
         reset = "reset" in sys.argv[1]
