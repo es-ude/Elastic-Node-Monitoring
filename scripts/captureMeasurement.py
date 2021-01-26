@@ -25,7 +25,7 @@ DAUGHTER_POWERED = False
 
 port = Configs.portToElasticnode
 print(port)
-baud = 500e3
+baud = 500e4
 ylist = None
 datastore = list()
 if DAUGHTER_POWERED:
@@ -103,6 +103,7 @@ def readFloats(ser):
     # wait for double FF
     target = 0
     while target < 3:
+        
         b, = struct.unpack('B', ser.read(1))
         if int(b) == target + 1:
             #print ("found one", int(b), end=" ")
@@ -114,7 +115,7 @@ def readFloats(ser):
             #print("not target", int(b))
             target = 0
 
-    #print("reading")
+    # print("reading")
 
     data = ser.read((len(graphnames) - 1) * 4 * numValues )
 
@@ -218,7 +219,9 @@ def live():
                 pp.semilogy(arr) #[:, :10])
                 #print(min, max)
                 #TODO: non positve number
-                pp.ylim([min/2, max*2])
+
+                pp.ylim([min/2, int(max*2)])
+
                 pp.legend(graphnames)
                 pp.grid()
                 pp.draw()
@@ -288,7 +291,10 @@ def printout():
             print("key exc")
         finally:
             print('done')
-            ser.close()
+            try:
+                ser.close()
+            except:
+                print("No connection to close.")
 
 def capture(filename=None):
     print("starting capture")

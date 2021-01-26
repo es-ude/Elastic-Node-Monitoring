@@ -1,3 +1,5 @@
+//#include "include/currentSenseApp.h"
+
 /************************************** Dependencies to be injected ************************************/
 #include "app/adapter_PAC1720/adapter_PAC1720.h"
 #include "src/i2cmaster/i2cmaster.h"
@@ -62,11 +64,25 @@ extern uint8_t sample_rate;
 #endif
 
 
+
+
+
 int main(void)
 {
     /* Init the hardware, print error if fail */
+    DDRD |= ((1<<2)|(1<<3));
+    MON1_LED_ON();
+    MON2_LED_ON();
+
     int8_t res = init_platform();
-    if(res != PAC1720_OK) print_error(res);
+    if(res != PAC1720_OK)
+    {
+        print_error(res);
+    }
+
+    MON1_LED_OFF();
+    MON2_LED_OFF(); // so if the LEDs are on, then the sensor must be broken
+
     /* Debug string */
 //    char msg[64];
     /** User controlled state */
@@ -84,69 +100,48 @@ int main(void)
     outputBuffer[(NUM_SENSORS*2*PRINT_VARIABLES+PRINT_STATE)*sizeof(float)+8 -2] = 2;
     outputBuffer[(NUM_SENSORS*2*PRINT_VARIABLES+PRINT_STATE)*sizeof(float)+8 -1] = 1;
 
-    DDRD |= ((1<<2)|(1<<3));
-    MON1_LED_OFF();
-    MON2_LED_OFF();
+
+    uint16_t timer_1_sec = 0;
 
 //todo add a number of rounds
 
 #if START_AND_STOP_ACTIVE
     while (running_state != START_OF_MEASUREMENT)
-{
-    /* code wait*/
-    update_state_main_mcu();
-    update_running_state();
-}
+    {
+        /* code wait*/
+        update_state_main_mcu();
+        update_running_state();
+    }
 #endif
-
 
 
 #if PRINT_STATE
     while(1){
-
-        # if OWN_STATE
-            //use own variable
-            update_running_state(state_variable); 
-       
-        #else 
-            update_state_main_mcu();
-            update_running_state();
-            update_sample_rate();
-        #endif
-        
-        
-        
         #if START_AND_STOP_ACTIVE
-        if(state_of_main_mcu == END_OF_MEASUREMENT){
-            MON1_LED_ON();
-            MON2_LED_OFF();
-           break; 
-        }
-        #endif      
+            if(state_of_main_mcu == END_OF_MEASUREMENT){
+                MON1_LED_ON();
+                MON2_LED_OFF();
+               break;
+            }
+        #endif
 
-                
 
+        powerMeasurement();
         switch (running_state)
         {
-        case 0:
-            MON1_LED_OFF();
-            MON2_LED_OFF();
-            /* code */
-            break;
-        default:
-            MON1_LED_OFF();    
-            MON2_LED_ON();  
-            adapt_sample_rate();     
-            powerMeasurement();
-           
-            //new_powerMeasurement(&state_of_main_mcu); 
-            break;
+            case 0:
+                MON1_LED_OFF();
+                MON2_LED_OFF();
+                /* code */
+                break;
+            default:
+                MON1_LED_OFF();
+                MON2_LED_ON();
+
+                break;
         }
-    
-       
+
         debugWaitUntilDone();
-
-
     }
 #else
     while (1)
@@ -166,121 +161,153 @@ int main(void)
 
 void powerMeasurement(void)
 {
-    ptr = (float*)(outputBuffer + 3);
-
-    meas_fail = adapter_get_measurements_PAC1720(&dev_USB_WIREL);
-    if (meas_fail){
-        MON1_LED_ON();
-        MON2_LED_ON();
-        return;
-    }
-    meas_fail = adapter_get_measurements_PAC1720(&dev_FPGA_VCC);
-    if (meas_fail){
-        MON1_LED_ON();
-        MON2_LED_ON();
-        return;
-    }
-    meas_fail = adapter_get_measurements_PAC1720(&dev_DAUGHTER_MCU);
-    if (meas_fail){
-        MON1_LED_ON();
-        MON2_LED_ON();
-        return;
-    }
-    meas_fail = adapter_get_measurements_PAC1720(&dev_FPGA_SRAM);
-    if (meas_fail){
-        MON1_LED_ON();
-        MON2_LED_ON();
-        return;
-    }
-#if DAUGHTER_POWERED
-    meas_fail = adapter_get_measurements_PAC1720(&dev_BATT);
-    if (meas_fail)
-        return;
-#endif
     //only when state comes from I2C if anywhere else then own state
 #if PRINT_STATE
-    #if RECHECK
-        update_state_main_mcu();
-        update_running_state();
+
+    # if OWN_STATE
+            //use own variable
+            update_running_state(state_variable);
+
+        #else
+            update_state_main_mcu();
+            update_running_state();
+            // update_sample_rate();
         #endif
-    *ptr = running_state;//
-    ptr++;
 #endif
-    *ptr = dev_USB_WIREL.DEV_CH1_measurements.POWER; // wireless
-    ptr++;
-    *ptr = dev_USB_WIREL.DEV_CH2_measurements.POWER; // usb
-    ptr++;
-    *ptr = dev_FPGA_VCC.DEV_CH1_measurements.POWER; // fpga aux
-    ptr++;
-    *ptr = dev_FPGA_VCC.DEV_CH2_measurements.POWER; // fpga int
-    ptr++;
-    *ptr = dev_DAUGHTER_MCU.DEV_CH1_measurements.POWER; // daughter
-    ptr++;
-    *ptr = dev_DAUGHTER_MCU.DEV_CH2_measurements.POWER; // mcu
-    ptr++;
-    *ptr = dev_FPGA_SRAM.DEV_CH1_measurements.POWER; // sram
-    ptr++;
-    *ptr = dev_FPGA_SRAM.DEV_CH2_measurements.POWER; // fpga io
+
+
+    if (running_state!=0) {
+
+        ptr = (float*)(outputBuffer + 3);
+
+        *ptr = running_state;//
+        ptr++;
+        //TODO: Why fails after some time
+
+        // Fails third
+
+        meas_fail = adapter_get_measurements_PAC1720(&dev_USB_WIREL);
+        if (meas_fail){
+            //        debugWriteString(meas_fail);
+            //        debugWriteString("Fehler 1");
+            MON1_LED_ON();
+            MON2_LED_ON();
+            return;
+        }
+        //    external_delay_function(5);
+
+        // Fails second
+
+        meas_fail = adapter_get_measurements_PAC1720(&dev_FPGA_VCC);
+        if (meas_fail){
+            //        debugWriteString("Fehler 2");
+            MON1_LED_ON();
+            MON2_LED_ON();
+            return;
+        }
+        //    external_delay_function(5);
+
+
+        // Does not sem to fail
+        meas_fail = adapter_get_measurements_PAC1720(&dev_DAUGHTER_MCU);
+        if (meas_fail){
+            //        debugWriteString("Fehler 3");
+            MON1_LED_ON();
+            MON2_LED_ON();
+            return;
+        }
+        //    external_delay_function(5);
+
+        // Fails first
+        meas_fail = adapter_get_measurements_PAC1720(&dev_FPGA_SRAM);
+        if (meas_fail){
+            //        debugWriteString("Fehler 4");
+            MON1_LED_ON();
+            MON2_LED_ON();
+            return;
+        }
+        //    external_delay_function(5);
+
 #if DAUGHTER_POWERED
-    ptr++;
-    *ptr = dev_BATT.DEV_CH1_measurements.POWER; // charge
-    ptr++;
-    *ptr = dev_BATT.DEV_CH2_measurements.POWER; // battery
-    ptr++;
+        meas_fail = adapter_get_measurements_PAC1720(&dev_BATT);
+        if (meas_fail)
+            return;
+#endif
+
+        *ptr = dev_USB_WIREL.DEV_CH1_measurements.POWER; // wireless
+        ptr++;
+        *ptr = dev_USB_WIREL.DEV_CH2_measurements.POWER; // usb
+        ptr++;
+
+        *ptr = dev_FPGA_VCC.DEV_CH1_measurements.POWER; // fpga aux
+        ptr++;
+        *ptr = dev_FPGA_VCC.DEV_CH2_measurements.POWER; // fpga int
+        ptr++;
+
+        *ptr = dev_DAUGHTER_MCU.DEV_CH1_measurements.POWER; // daughter
+        ptr++;
+        *ptr = dev_DAUGHTER_MCU.DEV_CH2_measurements.POWER; // mcu
+
+        ptr++;
+        *ptr = dev_FPGA_SRAM.DEV_CH1_measurements.POWER; // sram
+        ptr++;
+        *ptr = dev_FPGA_SRAM.DEV_CH2_measurements.POWER; // fpga io
+
+#if DAUGHTER_POWERED
+        ptr++;
+        *ptr = dev_BATT.DEV_CH1_measurements.POWER; // charge
+        ptr++;
+        *ptr = dev_BATT.DEV_CH2_measurements.POWER; // battery
+        ptr++;
 #endif
 #if PRINT_VARIABLES == 3
-    *ptr = dev_USB_WIREL.DEV_CH1_measurements.SOURCE_VOLTAGE; // wireless
-    ptr++;
-    *ptr = dev_USB_WIREL.DEV_CH1_measurements.CURRENT; // wireless
-    ptr++;
-    *ptr = dev_USB_WIREL.DEV_CH2_measurements.SOURCE_VOLTAGE; // usb
-    ptr++;
-    *ptr = dev_USB_WIREL.DEV_CH2_measurements.CURRENT; // usb
-    ptr++;
-    *ptr = dev_FPGA_VCC.DEV_CH1_measurements.SOURCE_VOLTAGE; // fpga aux
-    ptr++;
-    *ptr = dev_FPGA_VCC.DEV_CH1_measurements.CURRENT; // fpga aux
-    ptr++;
-    *ptr = dev_FPGA_VCC.DEV_CH2_measurements.SOURCE_VOLTAGE; // fpga int
-    ptr++;
-    *ptr = dev_FPGA_VCC.DEV_CH2_measurements.CURRENT; // fpga int
-    ptr++;
-    *ptr = dev_DAUGHTER_MCU.DEV_CH1_measurements.SOURCE_VOLTAGE; // daughter
-    ptr++;
-    *ptr = dev_DAUGHTER_MCU.DEV_CH1_measurements.CURRENT; // daughter
-    ptr++;
-    *ptr = dev_DAUGHTER_MCU.DEV_CH2_measurements.SOURCE_VOLTAGE; // mcu
-    ptr++;
-    *ptr = dev_DAUGHTER_MCU.DEV_CH2_measurements.CURRENT; // mcu
-    ptr++;
-    *ptr = dev_FPGA_SRAM.DEV_CH1_measurements.SOURCE_VOLTAGE; // sram
-    ptr++;
-    *ptr = dev_FPGA_SRAM.DEV_CH1_measurements.CURRENT; // sram
-    ptr++;
-    *ptr = dev_FPGA_SRAM.DEV_CH2_measurements.SOURCE_VOLTAGE; // fpga io
-    ptr++;
-    *ptr = dev_FPGA_SRAM.DEV_CH2_measurements.CURRENT; // fpga io
-#if DAUGHTER_POWERED
-    ptr++;
-    *ptr = dev_BATT.DEV_CH1_measurements.SOURCE_VOLTAGE; // charge
-    ptr++;
-    *ptr = dev_BATT.DEV_CH1_measurements.CURRENT; // charge
-    ptr++;
-    *ptr = dev_BATT.DEV_CH2_measurements.SOURCE_VOLTAGE; // battery
-    ptr++;
-    *ptr = dev_BATT.DEV_CH2_measurements.CURRENT; // battery
+        *ptr = dev_USB_WIREL.DEV_CH1_measurements.SOURCE_VOLTAGE; // wireless
+            ptr++;
+            *ptr = dev_USB_WIREL.DEV_CH1_measurements.CURRENT; // wireless
+            ptr++;
+            *ptr = dev_USB_WIREL.DEV_CH2_measurements.SOURCE_VOLTAGE; // usb
+            ptr++;
+            *ptr = dev_USB_WIREL.DEV_CH2_measurements.CURRENT; // usb
+            ptr++;
+            *ptr = dev_FPGA_VCC.DEV_CH1_measurements.SOURCE_VOLTAGE; // fpga aux
+            ptr++;
+            *ptr = dev_FPGA_VCC.DEV_CH1_measurements.CURRENT; // fpga aux
+            ptr++;
+            *ptr = dev_FPGA_VCC.DEV_CH2_measurements.SOURCE_VOLTAGE; // fpga int
+            ptr++;
+            *ptr = dev_FPGA_VCC.DEV_CH2_measurements.CURRENT; // fpga int
+            ptr++;
+            *ptr = dev_DAUGHTER_MCU.DEV_CH1_measurements.SOURCE_VOLTAGE; // daughter
+            ptr++;
+            *ptr = dev_DAUGHTER_MCU.DEV_CH1_measurements.CURRENT; // daughter
+            ptr++;
+            *ptr = dev_DAUGHTER_MCU.DEV_CH2_measurements.SOURCE_VOLTAGE; // mcu
+            ptr++;
+            *ptr = dev_DAUGHTER_MCU.DEV_CH2_measurements.CURRENT; // mcu
+            ptr++;
+            *ptr = dev_FPGA_SRAM.DEV_CH1_measurements.SOURCE_VOLTAGE; // sram
+            ptr++;
+            *ptr = dev_FPGA_SRAM.DEV_CH1_measurements.CURRENT; // sram
+            ptr++;
+            *ptr = dev_FPGA_SRAM.DEV_CH2_measurements.SOURCE_VOLTAGE; // fpga io
+            ptr++;
+            *ptr = dev_FPGA_SRAM.DEV_CH2_measurements.CURRENT; // fpga io
+        #if DAUGHTER_POWERED
+            ptr++;
+            *ptr = dev_BATT.DEV_CH1_measurements.SOURCE_VOLTAGE; // charge
+            ptr++;
+            *ptr = dev_BATT.DEV_CH1_measurements.CURRENT; // charge
+            ptr++;
+            *ptr = dev_BATT.DEV_CH2_measurements.SOURCE_VOLTAGE; // battery
+            ptr++;
+            *ptr = dev_BATT.DEV_CH2_measurements.CURRENT; // battery
+        #endif
 #endif
-#endif
-
-//    debugWriteFloatFull(dev_FPGA_VCC.DEV_CH1_measurements.POWER);
-//    debugNewLine();
 
 
-    debugWriteStringLength(outputBuffer, (NUM_SENSORS*2*PRINT_VARIABLES + PRINT_STATE)*sizeof(float)+8);
+        debugWriteStringLength(outputBuffer, (NUM_SENSORS * 2 * PRINT_VARIABLES + PRINT_STATE) * sizeof(float) + 8);
+    }
 }
-
-
-
 
 
 /* Initialize hardware */
@@ -364,7 +391,7 @@ void print_error(int8_t res){
     for (;;)
     {
         char msg[64];
-        sprintf(msg, "Failure while initializing: %d\r\n", res);
+        sprintf(msg, "!!!Failure while initializing: %d\r\n", res);
         debugWriteLine(msg);
         external_delay_function(1000);
     }
