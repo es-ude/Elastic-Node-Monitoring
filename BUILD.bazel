@@ -26,9 +26,9 @@ cc_library(
 )
 
 cc_library(
-     name = "SubSystem",
-     srcs = glob(["src/measurement/*.c"]),
-     hdrs = glob(["src/measurement/*.h"]),
+     name = "ElasticNodeMonitoringLib",
+     srcs = glob(["src/elasticNodeMonitoring/*.c"]),
+     hdrs = glob(["src/elasticNodeMonitoring/*.h"]),
      visibility = ["//visibility:public"],
      copts = cpu_frequency_flag(),
      deps = [
@@ -66,7 +66,9 @@ py_library(
 )
 
 py_binary(
-    name = "analysis",
-    srcs = ["scripts/analysis.py"],
-    deps = ["config",],
+    name = "captureMeasurement",
+    srcs = ["scripts/captureMeasurement.py"],
+    deps = [
+    "config",
+    ],
 )
