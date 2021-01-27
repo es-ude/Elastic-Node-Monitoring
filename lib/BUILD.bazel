@@ -1,0 +1,46 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+
+
+cc_library(
+	name = "DelayLib",
+	srcs = ["delay/user_delay.c"],
+	hdrs = ["delay/user_delay.h"],
+	copts = cpu_frequency_flag(),
+## For testing add '--define test=true ' to include MockLib ##
+#	deps = select({
+#
+#        ":test": [
+#		],
+#        "//conditions:default": [],
+#    }),
+)
+
+
+cc_library(
+	name = "I2cLib",
+	srcs = glob(["i2cmaster/*.c"]),
+	hdrs = glob(["i2cmaster/*.h"]),
+	copts = cpu_frequency_flag()
+)
+
+cc_library(
+	name = "PAC1720DriverLib",
+	srcs = ["PAC1720_driver/PAC1720_driver.c"],
+	hdrs = glob(["PAC1720_driver/*.h"]),
+	copts = cpu_frequency_flag(),
+	deps = [],
+)
+
+cc_library(
+     name = "SubSystem",
+     srcs = glob(["measurement/*.c"]),
+     hdrs = glob(["measurement/*.h"]),
+     copts = cpu_frequency_flag(),
+     deps = [
+     "I2cLib",
+     "@ElasticNodeMiddleware//:DebugLufaLib",
+     ]
+)

@@ -1,0 +1,74 @@
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+cc_library(
+	name = "DelayLib",
+	srcs = ["src/delay/user_delay.c"],
+	hdrs = ["src/delay/user_delay.h"],
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag(),
+)
+
+cc_library(
+	name = "I2cLib",
+	srcs = glob(["src/i2cmaster/*.c"]),
+	hdrs = glob(["src/i2cmaster/*.h"]),
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag()
+)
+
+cc_library(
+	name = "PAC1720DriverLib",
+	srcs = ["src/PAC1720_driver/PAC1720_driver.c"],
+	hdrs = glob(["src/PAC1720_driver/*.h"]),
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag(),
+	deps = [],
+)
+
+cc_library(
+     name = "ElasticNodeMonitoringLib",
+     srcs = glob(["src/elasticNodeMonitoring/*.c"]),
+     hdrs = glob(["src/elasticNodeMonitoring/*.h"]),
+     visibility = ["//visibility:public"],
+     copts = cpu_frequency_flag(),
+     deps = [
+     "I2cLib",
+     "PAC1720DriverLib",
+     "@ElasticNodeMiddleware//:DebugLufaLib",
+     ]
+)
+
+py_library(
+    name = "bitfileConfigs",
+    srcs = ["uploadScripts/bitfileConfigs.py"],
+    deps = ["@ElasticNodeMiddleware//:Configuration"],
+)
+
+py_library(
+    name = "portConfigs",
+    srcs = ["uploadScripts/portConfigs.py"],
+    deps = ["@ElasticNodeMiddleware//:Configuration"],
+)
+
+py_binary(
+    name = "uploadBitfiles",
+    srcs = ["uploadScripts/uploadBitfiles.py"],
+    deps = [
+        "portConfigs",
+        "@ElasticNodeMiddleware//:serial_test",
+        "bitfileConfigs"
+    ],
+)
+
+py_library(
+    name = "config",
+    srcs = ["scripts/config.py"],
+)
+
+py_binary(
+    name = "captureMeasurement",
+    srcs = ["scripts/captureMeasurement.py"],
+    deps = [
+    "config",
+    ],
+)
