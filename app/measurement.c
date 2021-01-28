@@ -169,7 +169,9 @@ void powerMeasurement(void) {
 #else
     update_state_main_mcu();
     update_running_state();
+    // TODO: evaluate sample rate
     // update_sample_rate();
+    // adapt_sample_rate();
 #endif
 #endif
 

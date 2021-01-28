@@ -308,11 +308,12 @@ def capture(filename=None):
         os.mkdir(Configs.pathToProject + "data")
     except OSError:
         pass
-    print(filename)
     if filename is None or filename == Configs.portToProgrammer:
         fn = Configs.pathToProject + "data/{}.csv".format(datetime.now())
     else:
         fn = Configs.pathToProject + "data/{}.csv".format(filename)
+    print(fn)
+
     outputfile = open(fn, 'w')
 
     # ignore very first value
