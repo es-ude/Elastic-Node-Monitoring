@@ -2,14 +2,14 @@
 
 /************************************** Dependencies to be injected ************************************/
 #include "app/adapter_PAC1720/adapter_PAC1720.h"
-#include "src/i2cmaster/i2cmaster.h"
-#include "src/delay/user_delay.h"
-#include "src/debug/debug.h"
+
 #include <stdio.h>
 #include <avr/io.h>
 
+#include "src/i2cmaster/i2cmaster.h"
+#include "src/delay/user_delay.h"
+#include "src/debug/debug.h"
 #include "src/elasticNodeMonitoring/elasticNodeMonitoring.h"
-
 
 void adapt_sample_rate();
 
@@ -72,7 +72,7 @@ extern uint8_t sample_rate;
 
 int main(void) {
     /* Init the hardware, print error if fail */
-    DDRD |= ((1 << 2) | (1 << 3));
+    MON_LED_INIT();
     MON1_LED_ON();
     MON2_LED_ON();
 
@@ -169,7 +169,14 @@ void powerMeasurement(void) {
 #else
     update_state_main_mcu();
     update_running_state();
-    // update_sample_rate();
+
+    // Get sample rate value
+    update_sample_rate();
+
+    // TODO: applies sample rate value,
+    // TODO: courses measurement stop!
+    adapt_sample_rate();
+
 #endif
 #endif
 

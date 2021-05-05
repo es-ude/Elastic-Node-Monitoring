@@ -5,13 +5,13 @@ as addition to the [elastic node middleware](https://github.com/es-ude/ElasticNo
 
 ## Use the Monitoring Code
 
-For the complete guide please refer to the [EnergyMonitoring.md](https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/CloneGuide.md) in the middleware repository.
+For the complete guide please refer to the [EnergyMonitoring.md](https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/EnergyMonitoring.md) in the middleware repository.
 
 ## Quick Start Guide
 
 ### Setup
 
-You need to set the serial port to your elastic node and programmer and the path to your data folder in the [scripts/config.py](scripts/config.py) and the port to your pogrammer again in the [user.bazelrc](user.bazelrc).
+You need to set the serial port to your elastic node and programmer and the path to your data folder in the [scripts/config.py](scripts/config.py) and the port to your programmer again in the [user.bazelrc](user.bazelrc).
 
 ### Upload Code
 
@@ -19,5 +19,4 @@ You need to set the serial port to your elastic node and programmer and the path
 
 ### Capture Measurment
 
-    bazel run captureMeasurement capture <filename>
-  
+    $ bazel run captureMeasurement capture <filename>

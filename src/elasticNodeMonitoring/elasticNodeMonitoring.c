@@ -2,11 +2,11 @@
 #include <inttypes.h>
 #include <stdint.h>
 #include "src/i2cmaster/i2cmaster.h"
-#include "src/debug/debug.h"
+
 #include "src/PAC1720_driver/PAC1720_definitions.h"
 //#include "src/adapter_PAC1720/adapter_PAC1720.h"
 
-
+#include "src/debug/debug.h"
 
 uint8_t state_of_main_mcu;
 uint8_t running_state;
@@ -42,6 +42,7 @@ void update_running_state(uint8_t state_variable){
 void update_state_main_mcu()
 {
     state_of_main_mcu = iic_read_from_device(64);
+
 }
 
 void update_sample_rate(){

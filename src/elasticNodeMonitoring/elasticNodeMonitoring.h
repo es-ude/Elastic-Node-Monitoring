@@ -1,5 +1,5 @@
-#ifndef SUB_SYSTEM_H
-#define SUB_SYSTEM_H
+#ifndef ELASTICNODEMONITORING_H
+#define ELASTICNODEMONITORING_H
 
 #define RECHECK 1
 
@@ -15,6 +15,7 @@
 #define STATE_MASK 0b00001111
 #define SAMPLE_MASK 0b11110000
 
+#define MON_LED_INIT() (DDRD |= ((1 << 2) | (1 << 3)))
 #define MON1_LED_ON()      (PORTD |= (1<<3))
 #define MON1_LED_OFF()      (PORTD &= ~(1<<3))
 #define MON2_LED_ON()        (PORTD |= (1<<2))
@@ -43,4 +44,4 @@ uint8_t get_running_state();
 
 uint8_t get_sample_rate();
 
-#endif
+#endif //ELASTICNODEMONITORING_H

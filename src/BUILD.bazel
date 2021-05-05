@@ -1,0 +1,51 @@
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+cc_library(
+	name = "DelayLib",
+	srcs = ["delay/user_delay.c"],
+	hdrs = ["delay/user_delay.h"],
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag(),
+)
+
+cc_library(
+	name = "I2cLib",
+	srcs = glob(["i2cmaster/*.c"]),
+	hdrs = glob(["i2cmaster/*.h"]),
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag()
+)
+
+cc_library(
+     name = "ElasticNodeMonitoringLib",
+     srcs = glob(["elasticNodeMonitoring/*.c"]),
+     hdrs = glob(["elasticNodeMonitoring/*.h"]),
+     visibility = ["//visibility:public"],
+     copts = cpu_frequency_flag(),
+     deps = [
+     "I2cLib",
+     "PAC1720DriverLib",
+     "DebugLib",
+     ]
+)
+
+cc_library(
+	name = "PAC1720DriverLib",
+	srcs = ["PAC1720_driver/PAC1720_driver.c"],
+	hdrs = glob(["PAC1720_driver/*.h"]),
+	visibility = ["//visibility:public"],
+	copts = cpu_frequency_flag(),
+	deps = [],
+)
+
+cc_library(
+	name = "DebugLib",
+	srcs = ["debug/debug.c"],
+	hdrs = ["debug/debug.h"],
+    copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+    deps = [
+         "@PeripheralInterface//:LufaUsart",
+     ],
+
+)

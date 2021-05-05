@@ -54,8 +54,3 @@ es_github_archive(
     name = "PeripheralInterface",
     version = "0.7.1"
 )
-
-es_github_archive(
-    name = "ElasticNodeMiddleware",
-    version = "1.1.1"
-)
